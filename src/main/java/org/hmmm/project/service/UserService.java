@@ -4,6 +4,8 @@ import org.hmmm.project.dto.User;
 import org.hmmm.project.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -11,11 +13,21 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    public User getUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
     public void addUser(String username) {
         User user = User.builder()
-                .id(User.getNewId())
                 .username(username)
                 .build();
-        userRepository.addUser(user);
+        userRepository.add(user);
+    }
+    public void deleteUser(Long id) {
+        userRepository.delete(id);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.getAllUsers();
     }
 }

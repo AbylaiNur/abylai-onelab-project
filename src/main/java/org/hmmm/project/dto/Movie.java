@@ -3,16 +3,16 @@ package org.hmmm.project.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+
+import java.util.List;
 
 @Getter
 @Setter
 @Builder
+@ToString
 public class Movie {
-    private static long idCount = 0;
     private Long id;
     private String title;
-
-    public static long getNewId() {
-        return ++idCount;
-    }
+    private List<Comment> comments;
 }

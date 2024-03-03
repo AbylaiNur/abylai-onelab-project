@@ -2,8 +2,6 @@ package org.hmmm.project.service;
 
 import org.hmmm.project.dto.Comment;
 import org.hmmm.project.dto.Movie;
-import org.hmmm.project.dto.Rate;
-import org.hmmm.project.dto.User;
 import org.hmmm.project.repository.CommentRepository;
 import org.hmmm.project.repository.MovieRepository;
 import org.hmmm.project.repository.UserRepository;
@@ -26,60 +24,30 @@ public class MovieService {
     }
 
     public List<Movie> getAllMovies() {
-        return movieRepository.getAllMovies();
+        return movieRepository.findAll();
     }
 
-    public List<Comment> getCommentsForMovie(long movieId) {
-        return commentRepository.getCommentsByMovieId(movieId);
-    }
-
-    public void addCommentToMovie(long movieId, long userId, String text) {
-        Movie movie = movieRepository.getMovieById(movieId);
-        User user = userRepository.getUserById(userId);
+    public void addCommentToMovie(Long movieId, Long userId, String text) {
         Comment comment = Comment.builder()
-                .id(Comment.getNewId())
                 .text(text)
-                .movie(movie)
-                .user(user)
+                .movieId(movieId)
+                .userId(userId)
                 .build();
-        commentRepository.addComment(comment);
+        commentRepository.add(comment);
     }
 
     public void addMovie(String title) {
         Movie movie = Movie.builder()
-                .id(Movie.getNewId())
                 .title(title)
                 .build();
-        movieRepository.addMovie(movie);
+        movieRepository.add(movie);
     }
 
-    public void deleteMovie(long id) {
-        movieRepository.deleteMovie(id);
+    public void deleteMovie(Long id) {
+        movieRepository.delete(id);
     }
 
-    public void deleteComment(long commentId) {
-        commentRepository.deleteComment(commentId);
+    public void deleteComment(Long commentId) {
+        commentRepository.delete(commentId);
     }
-
-    // TODO: add rateMovie functionality
-//    public void rateMovie(long movieId, int rate, long userId) {
-//        Movie movie = movieRepository.getMovieById(movieId);
-//        User user = userRepository.getUserById(userId);
-//        // TODO: check if user already rated the movie
-//        rateRepository.addRate(Rate.builder()
-//                .id(Rate.getNewId())
-//                .rate(rate)
-//                .movie(movie)
-//                .user(user)
-//                .build());
-//    }
-    // TODO: fix
-//        public List<Movie> getHighestRatingMovies(int count) {
-//        List<Movie> movies = movieRepository.getAllMovies();
-//        return movies.stream().sorted((m1, m2) -> {
-//            double m1Rate = m1.getRates().stream().mapToInt(Rate::getRate).average().orElse(0);
-//            double m2Rate = m2.getRates().stream().mapToInt(Rate::getRate).average().orElse(0);
-//            return Double.compare(m2Rate, m1Rate);
-//        }).limit(count).toList();
-//    }
 }

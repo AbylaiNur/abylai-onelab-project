@@ -4,8 +4,8 @@ import org.hmmm.project.dto.Movie;
 import java.util.List;
 
 public interface MovieRepository {
-    List<Movie> getAllMovies();
-    Movie getMovieById(long id);
-    void addMovie(Movie movie);
-    void deleteMovie(long id);
+    List<Movie> findAll();
+    Movie findById(Long id);
+    void add(Movie movie);
+    void delete(Long id);
 }
