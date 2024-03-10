@@ -1,18 +1,27 @@
 package org.hmmm.project.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 import java.util.List;
 
-@Getter
-@Setter
-@Builder
-@ToString
+@Data
+@Accessors(chain = true)
+@Entity
+@Table(name = "movies")
 public class Movie {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String title;
+
+    @OneToMany(mappedBy = "movie", fetch = FetchType.EAGER,
+               cascade=CascadeType.ALL, orphanRemoval=true)
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "movie", fetch = FetchType.EAGER,
+               cascade=CascadeType.ALL, orphanRemoval=true)
+    private List<Rate> rates;
 }

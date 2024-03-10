@@ -29,7 +29,7 @@ public class ValidationAspect {
                 if (comment.getText().isEmpty()) {
                     throw new IllegalArgumentException("Comment text cannot be empty");
                 }
-                if (comment.getUserId() == null || comment.getMovieId() == null) {
+                if (comment.getUser() == null || comment.getMovie() == null) {
                     throw new IllegalArgumentException("Comment must have a valid user and movie ID");
                 }
             }

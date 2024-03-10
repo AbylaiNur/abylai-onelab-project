@@ -20,3 +20,13 @@ CREATE TABLE IF NOT EXISTS COMMENTS (
                                         FOREIGN KEY (user_id) REFERENCES USERS(id) ON DELETE CASCADE,
                                         FOREIGN KEY (movie_id) REFERENCES MOVIES(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS RATES (
+                                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                        rate INT NOT NULL,
+                                        user_id BIGINT,
+                                        movie_id BIGINT,
+                                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                        FOREIGN KEY (user_id) REFERENCES USERS(id) ON DELETE CASCADE,
+                                        FOREIGN KEY (movie_id) REFERENCES MOVIES(id) ON DELETE CASCADE
+);
