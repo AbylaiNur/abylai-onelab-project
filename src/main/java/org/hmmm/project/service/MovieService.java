@@ -38,7 +38,7 @@ public class MovieService {
         return movieRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void addCommentToMovie(Long movieId, Long userId, String text) {
         Movie movie = movieRepository.findById(movieId).orElse(null);
         User user = userRepository.findById(userId).orElse(null);
@@ -49,7 +49,7 @@ public class MovieService {
         commentRepository.save(comment);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void addRateToMovie(Long movieId, Long userId, int rate) {
         Movie movie = movieRepository.findById(movieId).orElse(null);
         User user = userRepository.findById(userId).orElse(null);
@@ -60,19 +60,19 @@ public class MovieService {
         rateRepository.save(rate1);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void addMovie(String title) {
         Movie movie = new Movie()
                 .setTitle(title);
         movieRepository.save(movie);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void deleteMovie(Long id) {
         movieRepository.deleteById(id);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void deleteComment(Long commentId) {
         commentRepository.deleteById(commentId);
     }

@@ -1,5 +1,6 @@
 package org.hmmm.project;
 
+import org.hmmm.project.kafka.Producer;
 import org.hmmm.project.service.MovieService;
 import org.hmmm.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,88 @@ public class ProjectApplication implements CommandLineRunner {
 
     @Override
     public void run(String... arg0) {
+        MovieService movieService = context.getBean(MovieService.class);
+        UserService userService = context.getBean(UserService.class);
+        Producer producer = context.getBean(Producer.class);
+
+        wait(5000);
+
+        // adding two user
+        producer.sendAddUser("user1");
+        producer.sendAddUser("user2");
+
+        // adding movie1 and movie2
+        producer.sendAddMovie("movie1");
+        producer.sendAddMovie("movie2");
+
+        // ждем пока все сообщения обработаются
+        wait(3000);
+
+        // adding two rates of user1 and user2 to a movie
+        producer.sendAddRate("1,1,5");
+        producer.sendAddRate("2,2,9");
+
+        // adding two comments of user1 and user2 to a movie
+        producer.sendAddComment("1,1,comment1");
+        producer.sendAddComment("1,2,comment2");
+
+        // ждем пока все сообщения обработаются
+        wait(3000);
+
+        // для разделения вывода
+        System.out.println();
+
+        logger.info("{}", userService.getAllUsers());
+        logger.info("{}", movieService.getAllMovies());
+
+        // для разделения вывода
+        System.out.println();
+
+        // deleting users
+        producer.sendDeleteUser("1");
+        producer.sendDeleteUser("2");
+
+        // ждем пока сообщения обработаются
+        wait(3000);
+
+        // для разделения вывода
+        System.out.println();
+
+        logger.info("{}", userService.getAllUsers());
+        logger.info("{}", movieService.getAllMovies());
+
+        // для разделения вывода
+        System.out.println();
+
+        // deleting movies
+        producer.sendDeleteMovie("1");
+        producer.sendDeleteMovie("2");
+
+        // ждем пока сообщения обработаются
+        wait(3000);
+
+        // для разделения вывода
+        System.out.println();
+
+        logger.info("{}", movieService.getAllMovies());
+    }
+
+    private static void wait(int milliseconds) {
+        try {
+            Thread.sleep(milliseconds); // Wait for 1 second
+        } catch (InterruptedException e) {
+            logger.error("Caught InterruptedException: {}", e.getMessage());
+        }
+    }
+
+    // main предыдущего домашнего задания
+    /*
+    @Override
+    public void run(String... arg0) {
         UserService userService = context.getBean(UserService.class);
         MovieService movieService = context.getBean(MovieService.class);
+        Producer producer = context.getBean(Producer.class);
+        producer.sendMessage("bocchi the rock");
 
         // adding two users
         logger.info("Adding two users:");
@@ -111,6 +192,7 @@ public class ProjectApplication implements CommandLineRunner {
             logger.error("Caught IllegalArgumentException: {}", e.getMessage());
         }
     }
+    */
 }
 
 

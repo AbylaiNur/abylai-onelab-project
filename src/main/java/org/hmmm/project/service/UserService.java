@@ -25,14 +25,14 @@ public class UserService {
         return userRepository.findByUsername(username).orElse(null);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void addUser(String username) {
         User user = new User()
                 .setUsername(username);
         userRepository.save(user);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
