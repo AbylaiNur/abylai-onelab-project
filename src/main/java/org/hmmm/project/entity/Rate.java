@@ -1,4 +1,4 @@
-package org.hmmm.project.dto;
+package org.hmmm.project.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

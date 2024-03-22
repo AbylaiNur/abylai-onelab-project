@@ -3,9 +3,9 @@ package org.hmmm.project.aspect;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.hmmm.project.dto.Comment;
-import org.hmmm.project.dto.Movie;
-import org.hmmm.project.dto.User;
+import org.hmmm.project.entity.Comment;
+import org.hmmm.project.entity.Movie;
+import org.hmmm.project.entity.User;
 import org.springframework.stereotype.Component;
 
 @Aspect

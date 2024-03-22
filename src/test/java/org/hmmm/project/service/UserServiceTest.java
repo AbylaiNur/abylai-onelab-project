@@ -1,6 +1,8 @@
 package org.hmmm.project.service;
 
-import org.hmmm.project.dto.User;
+import org.hmmm.project.dto.Mapper;
+import org.hmmm.project.dto.UserDTO;
+import org.hmmm.project.entity.User;
 import org.hmmm.project.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,10 +17,15 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 
 class UserServiceTest {
+
     @Mock
-    UserRepository userRepository;
+    private UserRepository userRepository;
+
+    @Mock
+    private Mapper mapper;
+
     @InjectMocks
-    UserService userService;
+    private UserService userService;
 
     @BeforeEach
     void setUp() {
@@ -27,41 +34,59 @@ class UserServiceTest {
 
     @Test
     void testGetUserById() {
-        when(userRepository.findById(1L)).thenReturn(Optional.of(new User().setId(1L)));
+        User user = new User();
+        user.setUsername("testUser");
+        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(user));
 
         User result = userService.getUserById(1L);
-        Assertions.assertEquals(new User().setId(1L), result);
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals("testUser", result.getUsername());
     }
 
     @Test
     void testGetUserByUsername() {
-        when(userRepository.findByUsername("Mike")).thenReturn(Optional.of(new User().setUsername("Mike")));
+        User user = new User();
+        user.setUsername("username");
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
 
-        User result = userService.getUserByUsername("Mike");
-        Assertions.assertEquals(new User().setUsername("Mike"), result);
+        User result = userService.getUserByUsername("username");
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals("username", result.getUsername());
     }
 
     @Test
     void testAddUser() {
-        when(userRepository.save(any())).thenReturn(new User());
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
 
-        userService.addUser("username");
+        boolean result = userService.addUser("newUser");
+        verify(userRepository).save(any(User.class));
+        Assertions.assertTrue(result);
     }
 
     @Test
     void testDeleteUser() {
-        userService.deleteUser(1L);
+        when(userRepository.existsById(any(Long.class))).thenReturn(true);
+
+        boolean result = userService.deleteUser(1L);
         verify(userRepository).deleteById(1L);
+        Assertions.assertTrue(result);
     }
 
     @Test
     void testGetAllUsers() {
-        when(userRepository.findAll()).thenReturn(
-                List.of(new User().setUsername("user1"), new User().setUsername("user2")));
+        User user = new User();
+        user.setUsername("username");
+        List<User> users = List.of(user);
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername("username");
+        List<UserDTO> userDTOs = List.of(userDTO);
 
-        List<User> result = userService.getAllUsers();
-        Assertions.assertEquals(
-                List.of(new User().setUsername("user1"), new User().setUsername("user2")),
-                result);
+        when(userRepository.findAll()).thenReturn(users);
+        when(mapper.toUserDTO(any(User.class))).thenReturn(userDTO);
+
+        List<UserDTO> result = userService.getAllUsers();
+        Assertions.assertFalse(result.isEmpty());
+        Assertions.assertEquals(userDTOs.size(), result.size());
+        Assertions.assertEquals(userDTO.getUsername(), result.get(0).getUsername());
     }
 }

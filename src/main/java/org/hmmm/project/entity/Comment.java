@@ -1,4 +1,4 @@
-package org.hmmm.project.dto;
+package org.hmmm.project.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,10 +22,7 @@ public class Comment {
     private User user;
 
     @ToString.Exclude
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
     private Movie movie;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
 }

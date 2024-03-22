@@ -1,9 +1,10 @@
 package org.hmmm.project.service;
 
-import org.hmmm.project.dto.User;
+import org.hmmm.project.dto.Mapper;
+import org.hmmm.project.dto.UserDTO;
+import org.hmmm.project.entity.User;
 import org.hmmm.project.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -11,8 +12,10 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final Mapper mapper;
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+        this.mapper = new Mapper();
     }
 
     @Transactional(readOnly = true)
@@ -26,19 +29,27 @@ public class UserService {
     }
 
     @Transactional
-    public void addUser(String username) {
-        User user = new User()
-                .setUsername(username);
-        userRepository.save(user);
+    public boolean addUser(String username) {
+        if (userRepository.findByUsername(username).isEmpty()) {
+            userRepository.save(new User().setUsername(username));
+            return true;
+        }
+        return false;
     }
 
     @Transactional
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+    public boolean deleteUser(Long id) {
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
     @Transactional(readOnly = true)
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(mapper::toUserDTO)
+                .toList();
     }
 }
