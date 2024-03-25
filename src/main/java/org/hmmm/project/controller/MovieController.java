@@ -26,8 +26,12 @@ public class MovieController {
 
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addMovie(@RequestBody MovieCreateDTO movieCreateDTO) {
-        movieService.addMovie(movieCreateDTO);
+    public ResponseEntity<?> addMovie(@RequestBody MovieCreateDTO movieCreateDTO) {
+        if (movieService.addMovie(movieCreateDTO)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/details/{id}")

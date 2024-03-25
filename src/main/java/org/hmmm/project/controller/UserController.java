@@ -1,7 +1,6 @@
 package org.hmmm.project.controller;
 
 import org.hmmm.project.dto.UserDTO;
-import org.hmmm.project.entity.User;
 import org.hmmm.project.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

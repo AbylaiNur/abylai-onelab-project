@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
-
 @Data
 @Accessors(chain = true)
 @Entity

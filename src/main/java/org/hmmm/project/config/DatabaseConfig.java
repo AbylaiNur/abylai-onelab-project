@@ -2,6 +2,8 @@ package org.hmmm.project.config;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.cfg.Environment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
@@ -19,6 +21,8 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 public class DatabaseConfig {
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseConfig.class);
+
     @Bean
     public DataSource dataSource() {
         try {
@@ -27,7 +31,7 @@ public class DatabaseConfig {
                     .addScript("classpath:jdbc/schema.sql")
                     .build();
         } catch (Exception e) {
-            System.out.println("Embedded DataSource bean cannot be created!\n" + e);
+            logger.error("Failed to create DataSource bean", e);
             return null;
         }
     }

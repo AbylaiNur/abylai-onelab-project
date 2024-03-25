@@ -26,13 +26,20 @@ public class ControllerLoggingAspect {
     @Before("controller()")
     public void logRequestInfo(JoinPoint joinPoint) {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
+        if (attributes != null) {
+            HttpServletRequest request = attributes.getRequest();
+            logger.info("Request URL: {} {}", request.getMethod(), request.getRequestURL());
+            logger.info("IP Address: {}", request.getRemoteAddr());
+        }
 
-        logger.info("Request URL: {} {}", request.getMethod(), request.getRequestURL().toString());
-        logger.info("IP Address: {}", request.getRemoteAddr());
-
-        logger.info("Executing: {}.{}() with arguments = {}", joinPoint.getSignature().getDeclaringTypeName(),
-                joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
+        Object[] args = joinPoint.getArgs();
+        if (args != null) {
+            logger.info("Executing: {}.{}() with arguments = {}", joinPoint.getSignature().getDeclaringTypeName(),
+                    joinPoint.getSignature().getName(), Arrays.deepToString(args));
+        } else {
+            logger.info("Executing: {}.{}() with no arguments", joinPoint.getSignature().getDeclaringTypeName(),
+                    joinPoint.getSignature().getName());
+        }
     }
 
     @AfterReturning(pointcut = "controller()", returning = "response")

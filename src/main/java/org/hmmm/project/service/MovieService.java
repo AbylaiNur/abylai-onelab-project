@@ -6,8 +6,6 @@ import org.hmmm.project.dto.MovieDTO;
 import org.hmmm.project.dto.MovieDetailsDTO;
 import org.hmmm.project.entity.*;
 import org.hmmm.project.repository.*;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,13 +74,14 @@ public class MovieService {
     }
 
     @Transactional
-    public void addMovie(MovieCreateDTO movieCreateDTO) {
+    public boolean addMovie(MovieCreateDTO movieCreateDTO) {
         String title = movieCreateDTO.getTitle();
         String description = movieCreateDTO.getDescription();
         Movie movie = new Movie()
                 .setTitle(title)
                 .setDescription(description);
         movieRepository.save(movie);
+        return true;
     }
 
     @Transactional

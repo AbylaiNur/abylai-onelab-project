@@ -1,7 +1,6 @@
 package org.hmmm.project.dataloader;
 
 import org.hmmm.project.dto.MovieCreateDTO;
-import org.hmmm.project.repository.MovieRepository;
 import org.hmmm.project.service.MovieService;
 import org.hmmm.project.service.UserService;
 import org.springframework.boot.CommandLineRunner;
