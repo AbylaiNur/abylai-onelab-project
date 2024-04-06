@@ -1,8 +1,12 @@
 package org.hmmm.project.repository;
 
-import org.hmmm.project.dto.User;
+import org.hmmm.project.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface UserRepository {
-    User getUserById(long id);
-    User addUser(User user);
+import java.util.Optional;
+
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByUsername(String username);
 }
